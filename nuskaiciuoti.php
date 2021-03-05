@@ -1,16 +1,30 @@
 <?php
 require __DIR__ . '/bootstrap.php';
-include('color.php');
-if (isset($_GET['mmg'])) {
-  header('location: saskaitos.php');
+// POST scenarijus
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $id = $_GET['id'] ?? 0;
+
+  $id = (int) $id;
+
+  $nurasyti = $_POST['nurasyti'] ?? 0;
+  echo "ddd";
+  $nurasyti = (int) $nurasyti;
+  nurasyti($id, $nurasyti); // redaguoja
+  header('Location: saskaitos.php');
   die;
 }
-$likutis = 0;
-$number = '<input type="text">';
-$btn = '<button type="submit" name="mmg">Nurašyti</button>';
+//GET scenarijus
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-_d(__FILE__);
-
+  echo "ddd";
+  $id = $_GET['id'] ?? 0;
+  $id = (int) $id;
+  $user = getId($id);
+  if (!$user) {
+    header('Location: ' . URL);
+    die;
+  }
+}
 ?>
 
 
@@ -55,7 +69,7 @@ _d(__FILE__);
 
 
   </div>
-  <h3>Papildyti sąskaitą: </h3>
+  <h3>Nurašyti nuo sąskaitos: </h3>
 
 
   <table>
@@ -77,10 +91,15 @@ _d(__FILE__);
         </td>
         <td><?= $user['saskaitos_likutis'] ?>EUR</td>
         <td>
-          <form action="" method="get">
-            <?= $number ?> EUR <?= $btn ?>
-        </td>
-        </form>
+          <form action="<?= URL ?>nuskaiciuoti.php?id=<?= $user['id'] ?>" method="post">
+            <?= $user['saskaitos_likutis'] ?>
+  
+
+
+
+            Sąskaita <?= $user['vardas'] ?> : <input type="text" value="<?= $user['saskaitos_likutis'] ?> " name="nurasyti">
+            <button type="submit">Nurašyti</button>
+          </form>
 
       </tr>
     <?php }  ?>

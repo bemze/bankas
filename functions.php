@@ -81,7 +81,7 @@ function deleteUser(int $id) : void
         }
     }
 }
-function update(int $id, int $count) : void
+function papildyti(int $id, int $count) : void
 {
     $users = readData();// visai visi
     $user = getID($id);
@@ -89,6 +89,19 @@ function update(int $id, int $count) : void
         return;
     }
     $user['saskaitos_likutis'] += $count;
+    deleteUser($id);
+    $users = readData(); // visi be istrinto
+    $users[] = $user; 
+    writeData($users);
+}
+function nurasyti(int $id, int $count) : void
+{
+    $users = readData();// visai visi
+    $user = getID($id);
+    if(!$user) {
+        return;
+    }
+    $user['saskaitos_likutis'] -= $count;
     deleteUser($id);
     $users = readData(); // visi be istrinto
     $users[] = $user; 

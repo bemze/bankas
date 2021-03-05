@@ -7,4 +7,4 @@ require DIR. 'functions.php';
 include('color.php');
 include('skaiciavimai.php');
 
-_d($_SESSION, 'SESIJA--->');
+// _d($_SESSION, 'SESIJA--->');
