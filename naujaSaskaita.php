@@ -1,17 +1,23 @@
-
 <?php
-
+require __DIR__ . '/bootstrap.php';
     include ('color.php');
     //POST scenarijus
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // jei nera vardo - tada jis 0
     $user = $_POST['fname'] ?? 0;
     $user = (array) $user;
+    
+    $userCode = uniqid($user['ask']); // neaiskumas
+    _d($userCode);
     create2($user); // sukuria
+    function_alert("Sekmingai sukurta saskaita"); // neaiskumas
     header('Location: '.URL.'saskaitos.php');
     die;
 
 }
+
+
+
 
 ?>
 
@@ -40,15 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <form action="./saskaitosKurimas.php" method="POST">
     <!-- <input type="number" name="id" reguire placeholder="id" > -->
-    <input type="text" name="fname" reguire placeholder="Vardas" required>
-    <input type="text" placeholder="Pavarde" name ='surname' required>
-    <input type="text" placeholder="Sąskaitos nr" name ='account' >
-    <input type="text" placeholder="Sąskaitos balansas" name ='balance' >
+    <input type="text" name="fname" reguire placeholder="Vardas" required pattern="[A-Za-z]{3}">
+    <input type="text" placeholder="Pavarde" name ='surname' required pattern="[A-Za-z]{3}">
+    
+    <input type="number" placeholder="Sąskaitos balansas" name ='balance' >
     <input type="number" placeholder="Asmens kodas" name ='asmkodas' required>
     <button type="submit" class="btn btn-outline-primary">confirm</button>
-    <!-- <button type = "submit">confirm</button> -->
+   
     </form>
-</body>
+</body> 
 
 <h4>
 <a href="index.php">Pradinis puslapis</a>

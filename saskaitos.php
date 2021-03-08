@@ -2,18 +2,39 @@
 // session_start();
 require __DIR__ . '/bootstrap.php';
 
+
+_d(__DIR__);
+
 // include_once('saskaitosKurimas.php');
 //POST scenarijus
+
+// foreach(readData() as $users){
+//     $likutis =$users['saskaitos_likutis'];
+   
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'] ?? 0;
+    $likutis =$_POST['saskaitos_likutis'] ?? 0;
     $id = (int) $id;
-
-    if ($id > 0) {
-        // echo"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
+    if ( $likutis == 0 ) {
+       //jei saskaita 0 - trinam, kitu atveju, ne
         deleteUser($id); // trina
+    } else {
+        function_alert('sąskaita, kurioje yra lėšų -  netrinama');
+        
     }
-}
+} 
 
+
+// }
+
+
+
+usort(readData(), function ($a, $b) {
+    return $a['pavarde'] <=> $b['pavarde'];
+});
+    
 ?>
 
 <!DOCTYPE html>
@@ -63,8 +84,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         </tr>
         <?php
-
-        foreach (readData() as $user) {  ?>
+        // sortinimas
+$clients = readData();
+usort($clients, function ($a, $b) {
+    return $b['id'] <=> $a['id'];
+});
+        foreach ($clients as $user) {  ?>
 
             <!-- nuo -->
             <tr>

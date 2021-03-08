@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $id = (int) $id;
 
   $nurasyti = $_POST['nurasyti'] ?? 0;
-  echo "ddd";
+
   $nurasyti = (int) $nurasyti;
   nurasyti($id, $nurasyti); // redaguoja
   header('Location: saskaitos.php');
@@ -16,15 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //GET scenarijus
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-  echo "ddd";
   $id = $_GET['id'] ?? 0;
   $id = (int) $id;
   $user = getId($id);
-  if (!$user) {
-    header('Location: ' . URL);
+  if (!$user ) {
+    header('Location: saskaitos.php');
+    function_alert("Nėra tokio vartotojo");
     die;
-  }
+  } 
+
 }
+
+
 ?>
 
 
@@ -89,15 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <td>
           <?= $user['saskaitosNr'] ?>
         </td>
-        <td><?= $user['saskaitos_likutis'] ?>EUR</td>
+        <td><?= $user['saskaitos_likutis'] ?> EUR</td>
         <td>
           <form action="<?= URL ?>nuskaiciuoti.php?id=<?= $user['id'] ?>" method="post">
-            <?= $user['saskaitos_likutis'] ?>
-  
 
 
-
-            Sąskaita <?= $user['vardas'] ?> : <input type="text" value="<?= $user['saskaitos_likutis'] ?> " name="nurasyti">
+            <input type="text" value="<?= $user['saskaitos_likutis'] ?>" name="nurasyti">
             <button type="submit">Nurašyti</button>
           </form>
 

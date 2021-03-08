@@ -2,8 +2,6 @@
     require __DIR__.'/bootstrap.php';
     include ('color.php');
 
-    
-  
 
 ?>
 
@@ -38,19 +36,12 @@
         <hr>
         <a href="naujaSaskaita.php">Nauja sąskaita</a>
         <hr>
-        <a href="papildyti.php">Pridėti pinigėlių</a>
-        <hr>
-        <a href="nuskaiciuoti.php">Nuskaičiuoti pinigėlius</a>
-        <hr>
-        
+     
     </div>
     <img src="pig.png" alt="kiauliukas">
     
 
-    <!-- <a href="saskaitos.php">Sąskaitų sąrašas</a>
-    <a href="naujaSaskaita.php">Nauja sąskaita</a>
- -->
-
+ 
 
 
 </body>
