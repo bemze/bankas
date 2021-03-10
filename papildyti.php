@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   
     $papildymas = (int) $papildymas;
     papildyti($id, $papildymas);
-    function_alert("Sekmingai papildyta"); // redaguoja
+    $_SESSION['status'] = "Sėkmingai papildyta sąskaita"; 
     header('Location: saskaitos.php');
     die; 
    

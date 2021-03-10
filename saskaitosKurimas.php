@@ -13,3 +13,12 @@ header('location:saskaitos.php');
 die;
 
 
+// $user= $_POST['fname'];
+// $enterButton = $_POST['submit'];
+// $usernamelength= strlen($user);
+
+
+// if (isset($enterButton)){
+// if ($usernamelength < 3){
+// $_SESSION['status'] = "Per trumpas vardas"; 
+// }}

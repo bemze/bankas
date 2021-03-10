@@ -1,4 +1,5 @@
 <?php
+
 require __DIR__ . '/bootstrap.php';
 // POST scenarijus
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -10,6 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $nurasyti = (int) $nurasyti;
   nurasyti($id, $nurasyti); // redaguoja
+  
+  
+  $_SESSION['messages']['success'][] = "Saskaita ".$id." sumažinta";
   header('Location: saskaitos.php');
   die;
 }
@@ -26,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } 
 
 }
+
 
 
 ?>

@@ -1,8 +1,8 @@
 <?php
     require __DIR__.'/bootstrap.php';
     include ('color.php');
-
-
+    $_SESSION['status'] = 'Operacija atlikta sėkmingai!';
+    
 ?>
 
 <!DOCTYPE html>

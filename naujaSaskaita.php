@@ -1,21 +1,30 @@
 <?php
 require __DIR__ . '/bootstrap.php';
-    include ('color.php');
-    //POST scenarijus
+include('color.php');
+//POST scenarijus
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // jei nera vardo - tada jis 0
-    $user = $_POST['fname'] ?? 0;
-    $user = (array) $user;
     
-    $userCode = uniqid($user['ask']); // neaiskumas
-    _d($userCode);
-    create2($user); // sukuria
-    function_alert("Sekmingai sukurta saskaita"); // neaiskumas
+    $name = (string) $_POST['vardas'] ?? 0;
+    $surname = (string) $_POST['pavarde'] ?? 0;
+    
+  
+    $userNameLength = strlen($_POST['vardas']);
+    $userSurNameLength = strlen($_POST['pavarde']);
+    
+    if (isset($_POST['vardas']) || isset($_POST['pavarde'] ) ) {
+        if (($userNameLength < 3) || ($userSurNameLength < 3)) {
+            function_alert("Per trumpas vardas arba pavardė");
+   
+    } else {
+    create($name, $surname); // sukuria
+    $_SESSION['status'] = "Saskaita sukurta";
     header('Location: '.URL.'saskaitos.php');
+    // function_alert("Sekmingai sukurta saskaita"); 
     die;
-
+    }
 }
 
+}
 
 
 
@@ -23,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,32 +41,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Nauja sąskaita</title>
 </head>
 <?= $img_pig ?>
+
 <body style="<?= $color ?>">
-<div class="topnav">
+    <div class="topnav">
         <a class="active" href="saskaitos.php">Sąskaitos</a>
         <br>
-        
+
         <a href="papildyti.php">Pridėti pinigėlių</a>
         <br>
         <a href="nuskaiciuoti.php">Nuskaičiuoti pinigėlius</a>
         <br>
-        
-    </div>
-<h3>Nauja Sąskaita: </h3>
 
-<form action="./saskaitosKurimas.php" method="POST">
-    <!-- <input type="number" name="id" reguire placeholder="id" > -->
-    <input type="text" name="fname" reguire placeholder="Vardas" required pattern="[A-Za-z]{3}">
-    <input type="text" placeholder="Pavarde" name ='surname' required pattern="[A-Za-z]{3}">
+    </div>
+    <h3>Nauja Sąskaita: </h3>
     
-    <input type="number" placeholder="Sąskaitos balansas" name ='balance' >
-    <input type="number" placeholder="Asmens kodas" name ='asmkodas' required>
-    <button type="submit" class="btn btn-outline-primary">confirm</button>
+    <form action="" method="post">
+    
+   Vardas: <input type="text" name="vardas">
+   Pavarde: <input type="text" name="pavarde">
+   Asm. Kodas: <input type="number" name="ask">
+   <button type="submit" name="btn" class="btn btn-outline-primary">confirm</button>
+    </form> 
    
-    </form>
-</body> 
+     
+</body>
 
 <h4>
-<a href="index.php">Pradinis puslapis</a>
+    <a href="index.php">Pradinis puslapis</a>
 </h4>
+
 </html>

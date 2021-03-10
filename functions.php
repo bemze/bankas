@@ -20,25 +20,6 @@ function writeData(array $data): void
 }
 
 
-// function create(int $account) : void
-// {
-//     $data = readData();
-//     $id = getNextId();
-//     $balansas = [
-//       'id' => $id,
-//       'vardas' => $_POST["fname"],
-//       'pavarde' => $_POST["surname"],
-//       'saskaitosNr' => $_POST["account"],
-//       'saskaitos_likutis' => $account,
-//       'ask' => $_POST["asmkodas"]
-
-//     ];
-//     $new_balanse[]=$balansas;
-//     writeData($new_balanse);
-// }
-
-
-
 
 //sukuria faila, kuriame saugomi indexai, kurie 
 // niekada nesikartos, jei istrinsim faila nr2, tai naujas failas bus nr 3
@@ -96,70 +77,123 @@ function papildyti(int $id, int $count): void
 }
 function nurasyti(int $id, int $count): void
 {
-    $users = readData(); // visai visi
-    $user = getID($id);
+
+
+    $user = getUser($id);
     if (!$user) {
         return;
-    
-  
-    }else{
-        $user['saskaitos_likutis'] -= $count;
     }
-    deleteUser($id);
-    $users = readData(); // visi be istrinto
-    $users[] = $user;
-    writeData($users);
+
+    $saskaitos_likutis = $user['saskaitos_likutis'];
+
+    $likutis_atemus = $saskaitos_likutis - $count;
+
+    if ($likutis_atemus < 0) {
+        $_SESSION['messages']['success'][] = "Saskaita negali būti minusinė";
+        header('Location: ' . URL . 'saskaitos.php');
+        die;
+    } elseif ($count == 0 || $saskaitos_likutis == 0) {
+
+        $_SESSION['messages']['success'][] = "Sąskaita su 0 negaminama";
+        header('Location: ' . URL . 'saskaitos.php');
+        die;
+    } else {
+        $user['saskaitos_likutis'] -= $count;
+
+        deleteUser($id);
+        $users = readData(); // visi be istrinto
+        $users[] = $user;
+        writeData($users);
+    }
 }
+
+
+
 
 function function_alert($message)
 {
 
-    // Display the alert box  
+
     echo "<script>alert('$message');</script>";
 }
 
-function generateAccountNumber() : string 
+function generateAccountNumber(): string
 {
     $bankCode = 88000;
     $randNumber = '';
-for ($i=0; $i <10 ; $i++) { 
-    $rand = (string) rand(0,9);
-    $randNumber .= $rand;
-}
-    $acountNumber = "LT01".$bankCode.$randNumber;
+    for ($i = 0; $i < 10; $i++) {
+        $rand = (string) rand(0, 9);
+        $randNumber .= $rand;
+    }
+    $acountNumber = "LT01" . $bankCode . $randNumber;
     return $acountNumber;
 }
 
-function create2($post)
+
+
+function create($name, $surname): void
 {
-    // $json_array =  json_decode(file_get_contents('data.json'), 1);
-    $json_array =  readData();
-
-    //issitrauki json masyva.
-    //sugeneruoji nauja duomenu masyvuka
-    $nauja_saskaita = [
+    $users = readData();
+    $id = getNextId();
+    // $ak = 
+    $user = [
         'id' => getNextId(),
-        'vardas' => $post["fname"],
-        'pavarde' => $post["surname"],
+        'vardas' => $name,
+        'pavarde' => $surname,
         'saskaitosNr' => generateAccountNumber(),
-        'saskaitos_likutis' => $post["balance"],
-        'ask' => $post["asmkodas"]
-
+        'saskaitos_likutis' => '0',
+        'ask' => asmensKodas()
     ];
-    //papildai masyva nauju masyvuku
-    $json_array[] = $nauja_saskaita;
-    writeData($json_array);
-    // $stringas = json_encode($json_array);
-    //issaugai naujus duomenis su put_content
-    // file_put_contents('data.json', $stringas);
+   
+    // 2d array, jo sekantis index'as musu sukurtas useris
+    $users[] = $user;
+    writeData($users);
+    $_SESSION['status'] = 'Operacija atlikta sėkmingai!';
 }
 
-function asmensKodas () : string
+
+function asmensKodas()
 {
     $randKodas = '';
-    for ($i=0; $i <11 ; $i++) { 
-        
+    for ($i = 0; $i < 9; $i++) {
+        $rand = rand(0,9);
+        $randKodas .= $rand;
     }
-    $asmKodas = "3";
+    $asmKodas = "3" . $randKodas;
+
+    $users = readData();
+ 
+    foreach ($users as $user) {
+        if ($user['ask'] == $asmKodas) {
+            $_SESSION['messages']['error'][] = "Toks kodas jau yra";
+            return asmensKodas();
+        } 
+    }
     return $asmKodas;
+}
+
+function valideID($asmensKodas)   //kur valduoti?
+{
+    $users = readData();
+    foreach ($users as $user) {
+        if ($user['ask'] == $asmensKodas) {
+            $_SESSION['status'] = 'Ivyko klaida! Bandykite dar karta.';
+            return;
+        } else {
+            echo $asmensKodas . " tokio kodo duonbazėje nerasta";
+        }
+    }
+}
+
+
+
+function getUser(int $id): ?array
+{
+    $users = readData();
+    foreach ($users as $user) {
+        if ($user['id'] == $id) {
+            return $user;
+        }
+    }
+    return null;
 }
